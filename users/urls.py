@@ -7,8 +7,10 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', main.home, name='home'),
     path('home_client/', client.home_client, name='home_client'),
-    path('home_employee/', employee.home_employee, name='home_employee'),
-    path('add_product/', employee.add_product, name='add_product'),
     path('product_list_client/', client.product_list_client, name='product_list_client'),
-    path('product_list_employee/', employee.product_list_employee, name='product_list_employee'),
+
+    path('home_employee/', employee.product_list_employee, name='home_employee'),
+    path('add_product/', employee.add_product, name='add_product'),
+    path('product/<int:pk>/edit_product/', employee.edit_product, name='edit_product'),
+
 ]

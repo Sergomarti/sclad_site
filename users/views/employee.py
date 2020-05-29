@@ -10,10 +10,6 @@ from ..forms import EmployeeSignUpForm, ClientSignUpForm, ProductForm
 from ..models import Product, User
 
 
-def home_employee(request):
-    return render(request, 'home_employee.html')
-
-
 class EmployeeSignUpView(FormView):
     form_class = EmployeeSignUpForm
     initial = {'key': 'value'}
@@ -45,7 +41,7 @@ def add_product(request):
         if form.is_valid():
             product = form.save(commit=False)
             product.save()
-            return redirect('home_client/')
+            return redirect('/home_employee/')
     else:
         form = ProductForm()
 
@@ -53,8 +49,25 @@ def add_product(request):
 
 
 def product_list_employee(request):
-    products = Product.object.filter(type_of_goods=User.type_of_goods)
+    user = request.user
+    products = Product.objects.filter(type_of_goods=user.type_of_goods)
     return render(request, 'product_list_employee.html',
                   {
                       'products': products
+                  })
+
+
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.save()
+            return redirect('/home_employee/')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'edit_product.html',
+                  {
+                      'form': form
                   })

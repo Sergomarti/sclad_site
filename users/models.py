@@ -9,12 +9,16 @@ from django.core.signing import TimestampSigner
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
+from PIL import Image
 
 HOST = 'http://127.0.0.1:8000'
 
 
 class TypeOfGoods(models.Model):
     type_of_goods = models.CharField(primary_key=True, max_length=25, default='Horica and Event')
+
+    def __str__(self):
+        return self.type_of_goods
 
 
 class User(AbstractUser):
@@ -23,7 +27,7 @@ class User(AbstractUser):
 
     signer = TimestampSigner()
 
-    # type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.DO_NOTHING,  null=True)
+    type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.DO_NOTHING,  null=True)
     is_client = models.BooleanField(default=False)
     is_employee = models.BooleanField(default=False)
 
@@ -90,10 +94,22 @@ class User(AbstractUser):
 
 class Product(models.Model):
     brend = models.CharField(max_length=50)
-    product = models.CharField(max_length=500)
+    product = models.CharField(max_length=100)
     count = models.PositiveIntegerField(default=0)
     type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.DO_NOTHING)
-    image = models.ImageField(upload_to="products/", null=True)
+    image = models.ImageField(upload_to="images", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.brend}, {self.product}"
+
+    def save(self):
+        super().save()
+        img = Image.open(self.image.path)
+
+        if img.height > 500 or img.width > 500:
+            output_size = (500, 500)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 class Order(models.Model):
@@ -103,6 +119,9 @@ class Order(models.Model):
     date = models.DateField()
     comment = models.CharField(max_length=5000)
 
+    def __str__(self):
+        return f"{self.product} заказал {self.user} в количестве {self.count}"
+
 
 class AdditionProduct(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
@@ -111,9 +130,15 @@ class AdditionProduct(models.Model):
     date = models.DateField()
     comment = models.CharField(max_length=5000)
 
+    def __str__(self):
+        return f"{self.product} принёс {self.user} в количестве {self.count}"
+
 
 class OrderResponse(models.Model):
     response = models.CharField(primary_key=True, max_length=20)
+
+    def __str__(self):
+        return self.response
 
 
 class HistoryOrders(models.Model):
@@ -121,3 +146,6 @@ class HistoryOrders(models.Model):
     order = models.ForeignKey(Order, blank=True, on_delete=models.DO_NOTHING)
     response = models.ForeignKey(OrderResponse, on_delete=models.DO_NOTHING)
     comment = models.CharField(max_length=5000)
+
+    def __str__(self):
+        return f"Заявка {self.order}{self.addition} {self.response}"

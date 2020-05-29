@@ -1,41 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!--  <nav aria-label="breadcrumb">-->
-<!--    <ol class="breadcrumb">-->
-<!--      <li class="breadcrumb-item active" aria-current="page">My Quizzes</li>-->
-<!--    </ol>-->
-<!--  </nav>-->
-  <h2 class="mb-3">Products</h2>
-<!--  <a href="{% url 'teachers:quiz_add' %}" class="btn btn-primary mb-3" role="button">Add quiz</a>-->
-  <div class="card">
-    <table class="table mb-0">
-      <thead>
-        <tr>
-          <th>Brend</th>
-          <th>Name</th>
-          <th>Count</th>
-<!--          <th>Img</th>-->
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for products in products %}
-          <tr>
-            <td class="align-middle">{{ products.brand }}</td>
-            <td class="align-middle">{{ products.product }}</td>
-            <td class="align-middle">{{ products.count }}</td>
-<!--            <td class="align-middle">{{ quiz.taken_count }}</td>-->
-<!--            <td class="text-right">-->
-<!--&lt;!&ndash;              <a href="{% url 'teachers:quiz_results' quiz.pk %}" class="btn btn-primary">View results</a>&ndash;&gt;-->
-<!--            </td>-->
-          </tr>
-        {% empty %}
-          <tr>
-            <td class="bg-light text-center font-italic" colspan="5">Out of stock items</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<h2 class="page-header">Товары которые хранятся на складе:</h2>
+{% for products in products %}
+<div class="card-body">
+    <div class="card-body">
+        <div class="card-body">
+            <div class="card" style="width: 25rem;">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ products.image.url }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ products.brend }}</h5>
+                    <p class="card-text">{{ products.product }}</p>
+                    <p class="card-text">In quantit: {{ products.count }}</p>
+                    <a href="{% url 'edit_product' pk=products.pk %}" class="btn btn-primary">Редактировать</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% empty %}
+<h5 class="card-title">Товар на складе отсутствует!!!</h5>
+{% endfor %}
+
 {% endblock %}

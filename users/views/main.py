@@ -41,8 +41,7 @@ def login_user(request):
         form = LoginForm(request.POST)
         form.is_valid()
         user = form.get_user(request)
-        # and user.is_email_verified:
-        if user:
+        if user and user.is_email_verified:
             login(request, user)
             if user.is_client:
                 return redirect('/home_client/')

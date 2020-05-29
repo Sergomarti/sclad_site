@@ -36,7 +36,8 @@ class ClientSignUpView(FormView):
 
 
 def product_list_client(request):
-    products = Product.object.filter(type_of_goods=User.type_of_goods)
+    user = request.user
+    products = Product.objects.filter(type_of_goods=user.type_of_goods)
     return render(request, 'product_list_client.html',
                   {
                       'products': products

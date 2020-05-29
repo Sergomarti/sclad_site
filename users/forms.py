@@ -17,7 +17,7 @@ class EmployeeSignUpForm(forms.ModelForm):
             'email',
             'telephone',
             'password',
-            # 'type_of_goods',
+            'type_of_goods',
         ]
         widgets = {
             'password': forms.PasswordInput()
@@ -26,6 +26,7 @@ class EmployeeSignUpForm(forms.ModelForm):
     def save(self, commit=True):
         self.instance.password = make_password(self.cleaned_data['password'])
         user = super().save(self)
+        # user.type_of_goods = "Horica and Event"
         user.is_employee = True
         return user
 
@@ -62,7 +63,7 @@ class ClientSignUpForm(forms.ModelForm):
             'email',
             'telephone',
             'password',
-            # 'type_of_goods',
+            'type_of_goods',
         ]
         widgets = {
             'password': forms.PasswordInput()
