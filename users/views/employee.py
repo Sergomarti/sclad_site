@@ -45,13 +45,12 @@ def add_product(request):
     else:
         form = ProductForm()
 
-    return render(request, 'add_product.html', {'form': form})
+    return render(request, 'employee/add_product.html', {'form': form})
 
 
 def product_list_employee(request):
-    user = request.user
-    products = Product.objects.filter(type_of_goods=user.type_of_goods)
-    return render(request, 'product_list_employee.html',
+    products = Product.objects.all()
+    return render(request, 'employee/product_list_employee.html',
                   {
                       'products': products
                   })
@@ -67,7 +66,7 @@ def edit_product(request, pk):
             return redirect('/home_employee/')
     else:
         form = ProductForm(instance=product)
-    return render(request, 'edit_product.html',
+    return render(request, 'employee/edit_product.html',
                   {
                       'form': form
                   })

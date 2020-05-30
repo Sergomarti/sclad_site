@@ -156,9 +156,4 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# email settings
-# EMAIL_HOST = 'smtp.mailgun.org'
-# EMAIL_HOST_USER = 'postmaster@sandbox10c06708c579446688458465efcc8184.mailgun.org'
-# EMAIL_HOST_PASSWORD = 'cc0b1a9dc1afeb1ddf21c4562a2c7582-e5e67e3e-06e71888'
-# EMAIL_PORT = 587
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

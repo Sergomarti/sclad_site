@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="page-header">Товары которые хранятся на складе:</h2>
+<h2 class="page-header">Товары склада Pernod Ricard:</h2>
 {% for products in products %}
 <div class="card-body">
     <div class="card-body">
@@ -12,7 +12,8 @@
                     <h5 class="card-title">{{ products.brend }}</h5>
                     <p class="card-text">{{ products.product }}</p>
                     <p class="card-text">In quantit: {{ products.count }}</p>
-                    <a href="{% url 'edit_product' pk=products.pk %}" class="btn btn-primary">Редактировать</a>
+                    <a href="{% url 'order_product' pk=products.pk %}" class="btn btn-student btn-lg" role="button">Заказать</a>
+                    <a href="{% url 'return_product' pk=products.pk %}" class="btn btn-teacher btn-lg" role="button">Вернуть</a>
                 </div>
             </div>
         </div>

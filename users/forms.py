@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from django.forms import ModelForm
 
-from users.models import User, Product
+from users.models import User, Product, Order, AdditionProduct
 
 
 class EmployeeSignUpForm(forms.ModelForm):
@@ -26,7 +26,6 @@ class EmployeeSignUpForm(forms.ModelForm):
     def save(self, commit=True):
         self.instance.password = make_password(self.cleaned_data['password'])
         user = super().save(self)
-        # user.type_of_goods = "Horica and Event"
         user.is_employee = True
         return user
 
@@ -62,8 +61,8 @@ class ClientSignUpForm(forms.ModelForm):
             'username',
             'email',
             'telephone',
-            'password',
             'type_of_goods',
+            'password',
         ]
         widgets = {
             'password': forms.PasswordInput()
@@ -114,3 +113,15 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = ['brend', 'product', 'count', 'type_of_goods', 'image']
+
+
+class OrderForm(ModelForm):
+    class Meta:
+        model = Order
+        fields = ['count', 'date', 'comment']
+
+
+class ReturnForm(ModelForm):
+    class Meta:
+        model = AdditionProduct
+        fields = ['count', 'date', 'comment']

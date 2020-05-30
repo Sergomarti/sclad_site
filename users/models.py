@@ -15,7 +15,7 @@ HOST = 'http://127.0.0.1:8000'
 
 
 class TypeOfGoods(models.Model):
-    type_of_goods = models.CharField(primary_key=True, max_length=25, default='Horica and Event')
+    type_of_goods = models.CharField(max_length=25)
 
     def __str__(self):
         return self.type_of_goods
@@ -117,7 +117,7 @@ class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     count = models.PositiveIntegerField(default=0)
     date = models.DateField()
-    comment = models.CharField(max_length=5000)
+    comment = models.TextField()
 
     def __str__(self):
         return f"{self.product} заказал {self.user} в количестве {self.count}"
@@ -128,7 +128,7 @@ class AdditionProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     count = models.PositiveIntegerField(default=0)
     date = models.DateField()
-    comment = models.CharField(max_length=5000)
+    comment = models.TextField()
 
     def __str__(self):
         return f"{self.product} принёс {self.user} в количестве {self.count}"
@@ -145,7 +145,7 @@ class HistoryOrders(models.Model):
     addition = models.ForeignKey(AdditionProduct, blank=True, on_delete=models.DO_NOTHING)
     order = models.ForeignKey(Order, blank=True, on_delete=models.DO_NOTHING)
     response = models.ForeignKey(OrderResponse, on_delete=models.DO_NOTHING)
-    comment = models.CharField(max_length=5000)
+    comment = models.TextField()
 
     def __str__(self):
         return f"Заявка {self.order}{self.addition} {self.response}"

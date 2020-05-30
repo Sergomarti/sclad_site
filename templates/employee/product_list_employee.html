@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="page-header">Товары склада Pernod Ricard:</h2>
+{% for products in products %}
+<div class="card-body">
+    <div class="card-body">
+        <div class="card-body">
+            <div class="card" style="width: 25rem;">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ products.image.url }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ products.brend }}</h5>
+                    <p class="card-text">{{ products.product }}</p>
+                    <p class="card-text">In quantit: {{ products.count }}</p>
+                    <a href="{% url 'edit_product' pk=products.pk %}" class="btn btn-primary">Редактировать</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% empty %}
+<h5 class="card-title">Товар на складе отсутствует!!!</h5>
+{% endfor %}
+
+{% endblock %}
