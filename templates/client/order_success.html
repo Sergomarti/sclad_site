@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Поздравляем :)</h2>
-  <p class="lead">Ваша заказ успешно отправлен работникам склада!</p>
-  <a href="{% url 'home_client' %}" class="btn btn-student btn-lg" role="button">Продолжить</a>
+<div class="card mb-3">
+    <div class="card-body">
+        <h2>Поздравляем :)</h2>
+        <p class="lead">Ваша заказ успешно отправлен работникам склада!</p>
+        <a href="{% url 'home_client' %}" class="btn btn-student btn-lg" role="button">Продолжить</a>
+    </div>
+</div>
 {% endblock %}

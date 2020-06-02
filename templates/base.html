@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css?family=Clicker+Script" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'vendor/fontello-2f186091/css/fontello.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
     {% if user.is_authenticated and user.is_employee %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/teachers.css' %}">
@@ -17,23 +16,17 @@
     {% endif %}
 </head>
 <body>
-<div class="container my-4">
+
+<div class="container my-3">
     <div class="row justify-content-center">
         <div class="col-md-10 col-sm-12">
+            <div class="card-body">
+            </div>
             <div class="row">
                 <div class="col-6">
                     <h1 class="logo">
                         <a href="{% url 'home' %}">
                             Pernod Ricard
-                            <!--                            {% if user.is_authenticated %}-->
-                            <!--                            {% if user.is_employee %}-->
-                            <!--                            <span class="icon-feather" data-toggle="tooltip" data-placement="right"-->
-                            <!--                                  title="Employee profile"></span>-->
-                            <!--                            {% else %}-->
-                            <!--                            <span class="icon-graduation-cap" data-toggle="tooltip" data-placement="right"-->
-                            <!--                                  title="Client profile"></span>-->
-                            <!--                            {% endif %}-->
-                            <!--                            {% endif %}-->
                         </a>
                     </h1>
                 </div>
@@ -47,44 +40,60 @@
                     {% endif %}
                 </div>
             </div>
-            {% if user.is_authenticated and user.is_employee %}
-                        <ul class="nav nav-tabs nav-pills nav-fill">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'home_employee' %}">Главная</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'add_product' %}">Добавить товар</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Изменить товар</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Disabled</a>
-                            </li>
-                        </ul>
-            {% endif %}
-            {% if user.is_authenticated and user.is_client %}
-            <ul class="nav nav-tabs">
+            {% if user.is_authenticated and user.is_employee and user.is_email_verified%}
+            <ul class="nav nav-tabs nav-pills nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Active</a>
+                    <a class="nav-link" href="{% url 'home_employee' %}">Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="{% url 'add_product' %}">Добавить товар</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">Заявки</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'order' %}">Заказы</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'return' %}">Возвраты</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">История заявок</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'history_order_response_employee' %}">Заказы</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'history_return_response_employee' %}">Возвраты</a>
+                    </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
+                    <a class="nav-link" href="{% url 'edit_account_employee' pk=user.pk %}">Редактировать профиль</a>
                 </li>
             </ul>
             {% endif %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    {% block content %}
-                    {% endblock %}
-                </div>
-            </div>
+            {% if user.is_authenticated and user.is_client and user.is_email_verified %}
+            <ul class="nav nav-tabs nav-pills nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home_client' %}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Поиск</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">Мои заявки</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'history_order_response_client' %}">Заказы</a>
+                        <a class="dropdown-item" href="{% url 'history_return_response_client' %}">Возвраты</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'edit_account_client' pk=user.pk %}">Редактировать профиль</a>
+                </li>
+            </ul>
+            {% endif %}
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 </div>
@@ -106,6 +115,9 @@
       $(function () {
         $('[data-toggle="tooltip"]').tooltip();
       })
+
+
+
 
 
 

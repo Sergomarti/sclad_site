@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <br>
+        <h2 class="page-header">Возвраты клиентов Pernod Ricard:</h2>
+        <br>
+        {% for history in history %}
+        <div class="container" style="width: 60%;">
+            <div class="card my-4">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ history.addition.product.image.url }}"
+                     alt="Card image cap"
+                     style="width: 100%;">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5 class="card-title">Бренд: {{ history.addition.product.brend }}</h5>
+                    </div>
+                    <p class="card-text">Наименование: {{ history.addition.product.product }}</p>
+                    <p class="card-text">Заказали(в количестве): {{ history.addition.count }}</p>
+                    <p class="card-text">Кто: {{ history.addition.user.username }}</p>
+                    <p class="card-text">Комментарий заказчика: {{ history.addition.comment }}</p>
+                    <p class="card-text">Ответ: {{ history.response }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <h5 class="card-title">У вас отсутствуют просмотренные возвраты!!!</h5>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

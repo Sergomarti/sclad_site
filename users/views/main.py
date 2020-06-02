@@ -26,7 +26,7 @@ def verify(request):
     data = request.GET
     if user.is_token_correct(data['token']):
         user.verify_email()
-        return render(request, 'registration/email_verified.html')
+        return redirect('/')
     else:
         return Http404("Not Found")
 

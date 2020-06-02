@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <br>
+        <h2 class="page-header">Заказы:</h2>
+        <br>
+        {% for order in order %}
+        <div class="container" style="width: 60%;">
+            <div class="card my-4">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ order.product.image.url }}" alt="Card image cap"
+                     style="width: 100%;">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5 class="card-title">Бренд: {{ order.product.brend }}</h5>
+                    </div>
+                    <p class="card-text">Наименование: {{ order.product.product }}</p>
+                    <p class="card-text">Кто: {{ order.user.username }}</p>
+                    <p class="card-text">Заказали(в количестве): {{ order.count }}</p>
+                    <p class="card-text">Комментарий: {{ order.comment }}</p>
+                    <a href="{% url 'order_response' pk=order.pk %}" class="btn btn-primary">Ответить</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <h5 class="card-title">На данный момент заказов нет!!!</h5>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

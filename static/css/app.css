@@ -5,6 +5,7 @@ body {
   padding-bottom: 70px;
 }
 
+
 .footer {
   position: absolute;
   left: 0;
@@ -105,3 +106,18 @@ footer a {
 }
 
 
+.center-img {
+  display: block;
+  margin: 0 auto;
+}
+
+
+.lot_card {
+    margin 100px;
+    padding 100px;
+
+}
+
+.lot_image {
+    width: auto;
+}

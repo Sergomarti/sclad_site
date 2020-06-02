@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from django.forms import ModelForm
 
-from users.models import User, Product, Order, AdditionProduct
+from users.models import User, Product, Order, AdditionProduct, HistoryOrders
 
 
 class EmployeeSignUpForm(forms.ModelForm):
@@ -16,8 +16,8 @@ class EmployeeSignUpForm(forms.ModelForm):
             'username',
             'email',
             'telephone',
-            'password',
             'type_of_goods',
+            'password',
         ]
         widgets = {
             'password': forms.PasswordInput()
@@ -44,12 +44,12 @@ class EmployeeSignUpForm(forms.ModelForm):
 
         return username
 
-    # def clean_telephone(self):
-    #     telephone = self.data['telephone']
-    #     if not telephone.isalpha():
-    #         raise forms.ValidationError("Telephone should contains ONLY digits")
-    #
-    #     return telephone
+    def clean_telephone(self):
+        telephone = self.data['telephone']
+        if telephone.isalpha():
+            raise forms.ValidationError("Telephone should contains ONLY digits")
+
+        return telephone
 
 
 class ClientSignUpForm(forms.ModelForm):
@@ -89,12 +89,12 @@ class ClientSignUpForm(forms.ModelForm):
 
         return username
 
-    # def clean_telephone(self):
-    #     telephone = self.data['telephone']
-    #     if not telephone.isalpha():
-    #         raise forms.ValidationError("Telephone should contains ONLY digits")
-    #
-    #     return telephone
+    def clean_telephone(self):
+        telephone = self.data['telephone']
+        if telephone.isalpha():
+            raise forms.ValidationError("Telephone should contains ONLY digits")
+
+        return telephone
 
 
 class LoginForm(forms.Form):
@@ -125,3 +125,15 @@ class ReturnForm(ModelForm):
     class Meta:
         model = AdditionProduct
         fields = ['count', 'date', 'comment']
+
+
+class OrderResponseForm(ModelForm):
+    class Meta:
+        model = HistoryOrders
+        fields = ['response', 'comment']
+
+
+class ReturnResponseForm(ModelForm):
+    class Meta:
+        model = HistoryOrders
+        fields = ['response', 'comment']

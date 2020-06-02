@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Sign up for a free account</h2>
-  <p class="lead">Select below the type of account you want to create</p>
-  <a href="{% url 'client_signup' %}" class="btn btn-student btn-lg" role="button">I'm a client</a>
-  <a href="{% url 'employee_signup' %}" class="btn btn-teacher btn-lg" role="button">I'm a employee</a>
+<div class="card mb-3">
+    <div class="card-body">
+        <h2>Кем вы являетесь для Pernod Ricard?</h2>
+        <p class="lead">Выберите нужный вам вариант.</p>
+        <a href="{% url 'client_signup' %}" class="btn btn-student btn-lg" role="button">Клиент склада Pernod Ricard</a>
+        <a href="{% url 'employee_signup' %}" class="btn btn-teacher btn-lg" role="button">Работник склада Pernod
+            Ricard</a>
+    </div>
+</div>
 {% endblock %}

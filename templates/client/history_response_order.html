@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <br>
+        <h2 class="page-header">Ваши заказы:</h2>
+        <br>
+        {% for history in history %}
+        <div class="container" style="width: 60%;">
+            <div class="card my-4">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ history.order.product.image.url }}" alt="Card image cap"
+                     style="width: 100%;">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5 class="card-title">Бренд: {{ history.order.product.brend }}</h5>
+                    </div>
+                    <p class="card-text">Наименование: {{ history.order.product.product }}</p>
+                    <p class="card-text">Заказали(в количестве): {{ history.order.count }}</p>
+                    <p class="card-text">Ответ: {{ history.response }}</p>
+                    <p class="card-text">Комментарий от работника: {{ history.comment }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <h5 class="card-title">У вас отстутствуют прсмотренные заказы!!!</h5>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

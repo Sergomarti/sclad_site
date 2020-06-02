@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, FormView
 
 from ..forms import ClientSignUpForm, OrderForm, ReturnForm
-from ..models import Product, User, TypeOfGoods
+from ..models import Product, User, TypeOfGoods, HistoryOrders, Order
 
 
 class ClientSignUpView(FormView):
@@ -31,9 +31,25 @@ class ClientSignUpView(FormView):
         return super().get_context_data(**kwargs)
 
 
+def edit_account_client(request, pk):
+    account = get_object_or_404(User, pk=pk)
+    if request.method == "POST":
+        form = ClientSignUpForm(request.POST, instance=account)
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.save()
+            login(request, account)
+            return redirect('/')
+    else:
+        form = ClientSignUpForm(instance=account)
+    return render(request, 'client/account_edit.html',
+                  {
+                      'form': form
+                  })
+
+
 def product_list_client(request):
     user = request.user
-    # type_of_good = 'Horeca and Event'
     type_of_goods_client = user.type_of_goods
     type_of_good = type_of_goods_client.id
     if type_of_good == 1:
@@ -88,3 +104,22 @@ def return_product(request, pk):
 
 def return_success(request):
     return render(request, 'client/return_success.html')
+
+
+def order_response_list_client(request):
+    user = request.user
+    history = HistoryOrders.objects.filter(addition=None, order__user=user)
+    # history = history.filter(order__user=user)
+    return render(request, 'client/history_response_order.html',
+                  {
+                      'history': history
+                  })
+
+
+def return_response_list_client(request):
+    user = request.user
+    history = HistoryOrders.objects.filter(order=None, addition__user=user)
+    return render(request, 'client/history_response_return.html',
+                  {
+                      'history': history
+                  })
