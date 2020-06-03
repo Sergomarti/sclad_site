@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, FormView
 
@@ -49,6 +50,7 @@ def edit_account_client(request, pk):
 
 
 def product_list_client(request):
+    page = request.GET.get("page", 1)
     user = request.user
     type_of_goods_client = user.type_of_goods
     type_of_good = type_of_goods_client.id
@@ -56,9 +58,10 @@ def product_list_client(request):
         products = Product.objects.all()
     else:
         products = Product.objects.filter(type_of_goods=user.type_of_goods)
+    pagin = Paginator(products, 2, orphans=1)
     return render(request, 'client/product_list_client.html',
                   {
-                      'products': products
+                      'page': pagin.page(page)
                   })
 
 
@@ -107,19 +110,22 @@ def return_success(request):
 
 
 def order_response_list_client(request):
+    page = request.GET.get("page", 1)
     user = request.user
     history = HistoryOrders.objects.filter(addition=None, order__user=user)
-    # history = history.filter(order__user=user)
+    pagin = Paginator(history, 2, orphans=1)
     return render(request, 'client/history_response_order.html',
                   {
-                      'history': history
+                      'page': pagin.page(page)
                   })
 
 
 def return_response_list_client(request):
+    page = request.GET.get("page", 1)
     user = request.user
     history = HistoryOrders.objects.filter(order=None, addition__user=user)
+    pagin = Paginator(history, 2, orphans=1)
     return render(request, 'client/history_response_return.html',
                   {
-                      'history': history
+                      'page': pagin.page(page)
                   })

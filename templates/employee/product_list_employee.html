@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
+{% if page %}
+<div class="card bg-light mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-8 col-12">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary">Найти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="card mb-3">
     <div class="card-body">
         <br>
@@ -16,26 +31,41 @@
                         <h5 class="card-title">Бренд: {{ products.brend }}</h5>
                     </div>
                     <p class="card-text">Наименование: {{ products.product }}</p>
-                    <p class="card-text">Количество: {{ products.count }}</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Количество: {{ products.count }}</li>
+                    </ul>
+                    <br>
                     <a href="{% url 'edit_product' pk=products.pk %}" class="btn btn-primary">Редактировать</a>
                 </div>
             </div>
-
-            </div>
+        </div>
         {% endfor %}
-        <div >
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
                 {% if page.has_previous %}
-                <a href="?page={{page.previous_page_number}}">
-                    <
-                </a>
+                <li class="page-item"><a class="page-link" href="?page={{page.previous_page_number}}"><<</a>
+                </li>
                 {% endif %}
-                <span>{{ page.number}}</span>
+                <li class="page-item"><a class="page-link">{{ page.number}}</a></li>
                 {% if page.has_next %}
-                <a href="?page={{page.next_page_number}}">
-                    >
-                </a>
+                <li class="page-item"><a class="page-link" href="?page={{page.next_page_number}}">>></a></li>
                 {% endif %}
+            </ul>
+        </nav>
+        {% else %}
+        <div class="card text-center">
+            <div class="card-header">
+                Список пуст
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>На складе отсутствуют товары! Предлогаю вам пройти и заполнить форму для добовления товара на
+                        склад.</p>
+                    <a href="{% url 'add_product' %}" class="btn btn-primary">Добавить товар</a>
+                </blockquote>
+            </div>
         </div>
     </div>
 </div>
+{% endif%}
 {% endblock %}

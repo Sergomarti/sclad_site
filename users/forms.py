@@ -137,3 +137,13 @@ class ReturnResponseForm(ModelForm):
     class Meta:
         model = HistoryOrders
         fields = ['response', 'comment']
+
+
+class FilterForm(forms.ModelForm):
+    by_brend_name = forms.CharField(
+        widget=forms.TextInput
+    )
+
+    class Meta:
+        model = Product
+        fields = ['by_brend_name']

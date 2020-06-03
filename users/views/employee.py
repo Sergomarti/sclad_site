@@ -7,7 +7,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, FormView)
 
 from ..decorators import employee_required
-from ..forms import EmployeeSignUpForm, ClientSignUpForm, ProductForm, OrderResponseForm, ReturnResponseForm
+from ..forms import EmployeeSignUpForm, ClientSignUpForm, ProductForm, OrderResponseForm, ReturnResponseForm, FilterForm
 from ..models import Product, User, Order, AdditionProduct, HistoryOrders
 
 
@@ -50,12 +50,15 @@ def add_product(request):
 
 
 def product_list_employee(request):
+    form = FilterForm()
     page = request.GET.get("page", 1)
     products = Product.objects.all()
-    pagin = Paginator(products, 2)
+    pagin = Paginator(products, 2, orphans=1)
     return render(request, 'employee/product_list_employee.html',
                   {
-                      'page': pagin.page(page)
+                      'page': pagin.page(page),
+                      'form': form
+
                   })
 
 
@@ -93,10 +96,12 @@ def edit_account_employee(request, pk):
 
 
 def order_list_employee(request):
+    page = request.GET.get("page", 1)
     order = Order.objects.filter(was_response=False)
+    pagin = Paginator(order, 2, orphans=1)
     return render(request, 'employee/order_list.html',
                   {
-                      'order': order
+                      'page': pagin.page(page)
                   })
 
 
@@ -131,10 +136,12 @@ def order_response(request, pk):
 
 
 def return_list_employee(request):
+    page = request.GET.get("page", 1)
     return_product = AdditionProduct.objects.filter(was_response=False)
+    pagin = Paginator(return_product, 2, orphans=1)
     return render(request, 'employee/return_list.html',
                   {
-                      'return_product': return_product
+                      'page': pagin.page(page)
                   })
 
 
@@ -169,16 +176,20 @@ def return_response(request, pk):
 
 
 def order_response_list_employee(request):
+    page = request.GET.get("page", 1)
     history = HistoryOrders.objects.filter(addition=None)
+    pagin = Paginator(history, 2, orphans=1)
     return render(request, 'employee/history_response_order.html',
                   {
-                      'history': history
+                      'page': pagin.page(page)
                   })
 
 
 def return_response_list_employee(request):
+    page = request.GET.get("page", 1)
     history = HistoryOrders.objects.filter(order=None)
+    pagin = Paginator(history, 2, orphans=1)
     return render(request, 'employee/history_response_return.html',
                   {
-                      'history': history
+                      'page': pagin.page(page)
                   })

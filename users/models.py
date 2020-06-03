@@ -98,7 +98,7 @@ class Product(models.Model):
     product = models.CharField(max_length=100)
     count = models.PositiveIntegerField(default=0)
     type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.DO_NOTHING)
-    image = models.ImageField(upload_to="images", blank=True, null=True)
+    image = models.ImageField(upload_to="images")
 
     def __str__(self):
         return f"{self.brend}, {self.product}"
