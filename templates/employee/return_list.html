@@ -25,6 +25,7 @@
                     </div>
                     <p class="card-text">Наименование: {{ return.product.product }}</p>
                     <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Kоличество на складе: {{ return.product.count }}</li>
                         <li class="list-group-item">Кто: {{ return.user.username }}</li>
                         <li class="list-group-item">Дата: {{ return.date }}</li>
                         <li class="list-group-item">Заказали(в количестве): {{ return.count }}</li>

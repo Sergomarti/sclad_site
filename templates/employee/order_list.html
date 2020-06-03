@@ -3,11 +3,11 @@
 {% block content %}
 {% if page %}
 <nav class="navbar navbar-light bg-light justify-content-between">
-  <a class="navbar-brand">Поиск заказов по заказчику и по наименованию товара:</a>
-  <form class="form-inline" method="GET" action="/order/">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
-  </form>
+    <a class="navbar-brand">Поиск заказов по заказчику и по наименованию товара:</a>
+    <form class="form-inline" method="GET" action="/order/">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+    </form>
 </nav>
 <div class="card mb-3">
     <div class="card-body">
@@ -25,6 +25,7 @@
                     </div>
                     <p class="card-text">Наименование: {{ order.product.product }}</p>
                     <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Kоличество на складе: {{ order.product.count }}</li>
                         <li class="list-group-item">Кто: {{ order.user.username }}</li>
                         <li class="list-group-item">Дата: {{ order.date }}</li>
                         <li class="list-group-item">Заказали(в количестве): {{ order.count }}</li>
@@ -39,12 +40,14 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 {% if page.has_previous %}
-                <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{page.previous_page_number}}"><<</a>
+                <li class="page-item"><a class="page-link"
+                                         href="?{{ request.GET.urlencode }}&page={{page.previous_page_number}}"><<</a>
                 </li>
                 {% endif %}
                 <li class="page-item"><a class="page-link">{{ page.number}}</a></li>
                 {% if page.has_next %}
-                <li class="page-item"><a class="page-link" href="?{{ request.GET.urlencode }}&page={{page.next_page_number}}">>></a></li>
+                <li class="page-item"><a class="page-link"
+                                         href="?{{ request.GET.urlencode }}&page={{page.next_page_number}}">>></a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -56,9 +59,10 @@
             <div class="card-body">
                 <blockquote class="blockquote mb-0">
                     <p>По вашему запросу ничего не найдено. Или же новых заказов ещё не поступало.</p>
-                    <footer class="blockquote-footer">Мне кажется, что большинство людей ещё не знают про такой сайт как <cite
-                            title="Source Title">Pernod
-                        Ricard!</cite>
+                    <footer class="blockquote-footer">Мне кажется, что большинство людей ещё не знают про такой сайт как
+                        <cite
+                                title="Source Title">Pernod
+                            Ricard!</cite>
                     </footer>
                 </blockquote>
             </div>
