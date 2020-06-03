@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if page %}
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">Поиск согласованых или отклоненных заказов:</a>
+    <form class="form-inline" method="GET" action="/history_ord_employee/">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+    </form>
+</nav>
 <div class="card mb-3">
     <div class="card-body">
-        {% if page %}
         <br>
         <h2 class="page-header">Заказы клиентов Pernod Ricard:</h2>
         <br>
@@ -21,6 +28,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Заказали(в количестве): {{ history.order.count }}</li>
                         <li class="list-group-item">Кто: {{ history.order.user.username }}</li>
+                        <li class="list-group-item">Дата: {{ history.order.date }}</li>
                         <li class="list-group-item">Комментарий заказчика: {{ history.order.comment }}</li>
                         <li class="list-group-item">Ответ: {{ history.response }}</li>
                     </ul>
@@ -45,16 +53,15 @@
             <div class="card-header">
                 Список пуст
             </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>По вашему запросу ничего не найдено. Или же вы не ответили ещё ни на один заказ. Предлагаю вам посетить стрницу заказов для согласования или
+                        отклонения заявок.</p>
+                    <a href="{% url 'order' %}" class="btn btn-primary">Перейти к заказам</a>
+                </blockquote>
+            </div>
         </div>
-        <div class="card-body">
-            <blockquote class="blockquote mb-0">
-                <p>Вы не ответили ещё ни на один заказ. Предлагаю вам посетить стрницу заказов для согласования или
-                    отклонения заявок.</p>
-                <a href="{% url 'order' %}" class="btn btn-primary">Перейти к заказам</a>
-            </blockquote>
-        </div>
+        {% endif%}
     </div>
-    {% endif%}
-</div>
 </div>
 {% endblock %}

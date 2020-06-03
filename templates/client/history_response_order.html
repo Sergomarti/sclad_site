@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if page %}
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">Поиск согласованых или отклоненных заказов:</a>
+    <form class="form-inline" method="GET" action="/history_ord_client/">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+    </form>
+</nav>
 <div class="card mb-3">
     <div class="card-body">
-        {% if page %}
         <br>
         <h2 class="page-header">Ваши заказы:</h2>
         <br>
@@ -20,6 +27,7 @@
                     <p class="card-text">Наименование: {{ history.order.product.product }}</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Заказали(в количестве): {{ history.order.count }}</li>
+                        <li class="list-group-item">Дата: {{ history.order.date }}</li>
                         <li class="list-group-item">Комментарий от работника: {{ history.comment }}</li>
                         <li class="list-group-item">Ответ: {{ history.response }}</li>
                     </ul>
@@ -46,7 +54,7 @@
             </div>
             <div class="card-body">
                 <blockquote class="blockquote mb-0">
-                    <p>У вас ещё нет проверенных заказов. Вероятно ваш заказ на обработке у работников компании. Если вы
+                    <p>По вашему запросу ничего не найдено. Или же у вас ещё нет проверенных заказов. Вероятно ваш заказ на обработке у работников компании. Если вы
                         ещё не делали заказ, предлагаю вам перейти к списку
                         товаров для заполнения заявки.</p>
                     <a href="{% url 'home_client' %}" class="btn btn-primary">Товары</a>

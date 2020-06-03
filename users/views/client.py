@@ -1,7 +1,12 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_GET
 from django.views.generic import CreateView, ListView, UpdateView, FormView
 
 from ..forms import ClientSignUpForm, OrderForm, ReturnForm
@@ -49,15 +54,21 @@ def edit_account_client(request, pk):
                   })
 
 
+@login_required
+@require_GET
 def product_list_client(request):
+    query = request.GET.get("q", "")
     page = request.GET.get("page", 1)
     user = request.user
     type_of_goods_client = user.type_of_goods
     type_of_good = type_of_goods_client.id
     if type_of_good == 1:
-        products = Product.objects.all()
+        products = Product.objects.filter(
+            Q(brend__icontains=query) | Q(product__icontains=query)
+        )
     else:
-        products = Product.objects.filter(type_of_goods=user.type_of_goods)
+        products = Product.objects.filter(Q(brend__icontains=query) | Q(product__icontains=query))
+        products = products.filter(type_of_goods=user.type_of_goods)
     pagin = Paginator(products, 2, orphans=1)
     return render(request, 'client/product_list_client.html',
                   {
@@ -65,6 +76,7 @@ def product_list_client(request):
                   })
 
 
+@login_required
 def order_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == "POST":
@@ -72,6 +84,7 @@ def order_product(request, pk):
         if form.is_valid():
             order = form.save(commit=False)
             order.user = request.user
+            order.date = datetime.datetime.now().date()
             order.product = product
             order.save()
             return redirect('/order_success/')
@@ -83,10 +96,12 @@ def order_product(request, pk):
                   })
 
 
+@login_required
 def order_success(request):
     return render(request, 'client/order_success.html')
 
 
+@login_required
 def return_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == "POST":
@@ -105,14 +120,20 @@ def return_product(request, pk):
                   })
 
 
+@login_required
 def return_success(request):
     return render(request, 'client/return_success.html')
 
 
+@login_required
+@require_GET
 def order_response_list_client(request):
+    query = request.GET.get("q", "")
     page = request.GET.get("page", 1)
     user = request.user
-    history = HistoryOrders.objects.filter(addition=None, order__user=user)
+    history = HistoryOrders.objects.filter(
+        Q(response__response__icontains=query) | Q(order__product__brend__icontains=query), addition=None,
+        order__user=user)
     pagin = Paginator(history, 2, orphans=1)
     return render(request, 'client/history_response_order.html',
                   {
@@ -120,10 +141,15 @@ def order_response_list_client(request):
                   })
 
 
+@login_required
+@require_GET
 def return_response_list_client(request):
+    query = request.GET.get("q", "")
     page = request.GET.get("page", 1)
     user = request.user
-    history = HistoryOrders.objects.filter(order=None, addition__user=user)
+    history = HistoryOrders.objects.filter(
+        Q(response__response__icontains=query) | Q(addition__product__brend__icontains=query), order=None,
+        addition__user=user)
     pagin = Paginator(history, 2, orphans=1)
     return render(request, 'client/history_response_return.html',
                   {

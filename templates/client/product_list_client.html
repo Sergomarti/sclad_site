@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if page %}
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <a class="navbar-brand">Поиск товаров по наименованию и бренду:</a>
+  <form class="form-inline" method="GET" action="/home_client/">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+  </form>
+</nav>
 <div class="card mb-3">
     <div class="card-body">
-        {% if page %}
         <br>
         <h2 class="page-header">Товары склада Pernod Ricard:</h2>
         <br>
@@ -45,7 +52,7 @@
             </div>
             <div class="card-body">
                 <blockquote class="blockquote mb-0">
-                    <p>На складе отсутствуют товары!</p>
+                    <p>По вашему запросу ничего не найдено. Или же на складе отсутствуют товары!</p>
                     <footer class="blockquote-footer">Кажется компания <cite
                             title="Source Title">Pernod
                         Ricard!</cite> не хочет предостовлять свой товар клиентам.

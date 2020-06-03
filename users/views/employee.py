@@ -2,12 +2,14 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_GET
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, FormView)
 
 from ..decorators import employee_required
-from ..forms import EmployeeSignUpForm, ClientSignUpForm, ProductForm, OrderResponseForm, ReturnResponseForm, FilterForm
+from ..forms import EmployeeSignUpForm, ClientSignUpForm, ProductForm, OrderResponseForm, ReturnResponseForm
 from ..models import Product, User, Order, AdditionProduct, HistoryOrders
 
 
@@ -49,19 +51,22 @@ def add_product(request):
     return render(request, 'employee/add_product.html', {'form': form})
 
 
+@login_required
+@require_GET
 def product_list_employee(request):
-    form = FilterForm()
     page = request.GET.get("page", 1)
-    products = Product.objects.all()
+    query = request.GET.get("q", "")
+    products = Product.objects.filter(
+        Q(brend__icontains=query) | Q(product__icontains=query)
+    )
     pagin = Paginator(products, 2, orphans=1)
-    return render(request, 'employee/product_list_employee.html',
-                  {
-                      'page': pagin.page(page),
-                      'form': form
+    return render(request, 'employee/product_list_employee.html', context={
+        'page': pagin.page(page),
 
-                  })
+    })
 
 
+@login_required
 def edit_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == "POST":
@@ -78,6 +83,7 @@ def edit_product(request, pk):
                   })
 
 
+@login_required
 def edit_account_employee(request, pk):
     account = get_object_or_404(User, pk=pk)
     if request.method == "POST":
@@ -95,9 +101,13 @@ def edit_account_employee(request, pk):
                   })
 
 
+@login_required
+@require_GET
 def order_list_employee(request):
     page = request.GET.get("page", 1)
-    order = Order.objects.filter(was_response=False)
+    query = request.GET.get("q", "")
+    order = Order.objects.filter(Q(user__username__icontains=query) | Q(product__product__icontains=query),
+                                 was_response=False)
     pagin = Paginator(order, 2, orphans=1)
     return render(request, 'employee/order_list.html',
                   {
@@ -105,6 +115,7 @@ def order_list_employee(request):
                   })
 
 
+@login_required
 def order_response(request, pk):
     order = get_object_or_404(Order, pk=pk)
     pr = order.product
@@ -135,9 +146,13 @@ def order_response(request, pk):
                   })
 
 
+@login_required
+@require_GET
 def return_list_employee(request):
     page = request.GET.get("page", 1)
-    return_product = AdditionProduct.objects.filter(was_response=False)
+    query = request.GET.get("q", "")
+    return_product = AdditionProduct.objects.filter(
+        Q(user__username__icontains=query) | Q(product__product__icontains=query), was_response=False)
     pagin = Paginator(return_product, 2, orphans=1)
     return render(request, 'employee/return_list.html',
                   {
@@ -145,6 +160,7 @@ def return_list_employee(request):
                   })
 
 
+@login_required
 def return_response(request, pk):
     return_product = get_object_or_404(AdditionProduct, pk=pk)
     pr = return_product.product
@@ -175,9 +191,14 @@ def return_response(request, pk):
                   })
 
 
+@login_required
+@require_GET
 def order_response_list_employee(request):
     page = request.GET.get("page", 1)
-    history = HistoryOrders.objects.filter(addition=None)
+    query = request.GET.get("q", "")
+    history = HistoryOrders.objects.filter(
+        Q(response__response__icontains=query) | Q(order__product__brend__icontains=query),
+        addition=None)
     pagin = Paginator(history, 2, orphans=1)
     return render(request, 'employee/history_response_order.html',
                   {
@@ -185,9 +206,13 @@ def order_response_list_employee(request):
                   })
 
 
+@login_required
+@require_GET
 def return_response_list_employee(request):
     page = request.GET.get("page", 1)
-    history = HistoryOrders.objects.filter(order=None)
+    query = request.GET.get("q", "")
+    history = HistoryOrders.objects.filter(
+        Q(response__response__icontains=query) | Q(addition__product__brend__icontains=query), order=None)
     pagin = Paginator(history, 2, orphans=1)
     return render(request, 'employee/history_response_return.html',
                   {

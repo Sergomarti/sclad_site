@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if page %}
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <a class="navbar-brand">Поиск заказов по заказчику и по наименованию товара:</a>
+  <form class="form-inline" method="GET" action="/order/">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+  </form>
+</nav>
 <div class="card mb-3">
     <div class="card-body">
-        {% if page %}
         <br>
         <h2 class="page-header">Заказы:</h2>
         <br>
@@ -19,6 +26,7 @@
                     <p class="card-text">Наименование: {{ order.product.product }}</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Кто: {{ order.user.username }}</li>
+                        <li class="list-group-item">Дата: {{ order.date }}</li>
                         <li class="list-group-item">Заказали(в количестве): {{ order.count }}</li>
                         <li class="list-group-item">Комментарий: {{ order.comment }}</li>
                     </ul>
@@ -47,7 +55,7 @@
             </div>
             <div class="card-body">
                 <blockquote class="blockquote mb-0">
-                    <p>Новых заказов ещё не поступало.</p>
+                    <p>По вашему запросу ничего не найдено. Или же новых заказов ещё не поступало.</p>
                     <footer class="blockquote-footer">Мне кажется, что большинство людей ещё не знают про такой сайт как <cite
                             title="Source Title">Pernod
                         Ricard!</cite>

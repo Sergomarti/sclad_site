@@ -1,21 +1,13 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 {% block content %}
 {% if page %}
-<div class="card bg-light mb-3">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-8 col-12">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ next }}">
-                    {{ form|crispy }}
-                    <button type="submit" class="btn btn-primary">Найти</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <a class="navbar-brand">Поиск товаров по наименованию и бренду:</a>
+  <form class="form-inline" method="GET" action="/home_employee/">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+  </form>
+</nav>
 <div class="card mb-3">
     <div class="card-body">
         <br>
@@ -59,7 +51,7 @@
             </div>
             <div class="card-body">
                 <blockquote class="blockquote mb-0">
-                    <p>На складе отсутствуют товары! Предлогаю вам пройти и заполнить форму для добовления товара на
+                    <p>По вашему запросу ничего не найдено. Или же на складе отсутствуют товары! Предлогаю вам пройти и заполнить форму для добовления товара на
                         склад.</p>
                     <a href="{% url 'add_product' %}" class="btn btn-primary">Добавить товар</a>
                 </blockquote>
