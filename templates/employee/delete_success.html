@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h2>Товар удалён!</h2>
+        <p class="lead">Товар со склада убран.</p>
+        <a href="{% url 'home_employee' %}" class="btn btn-student btn-lg" role="button">Продолжить</a>
+    </div>
+</div>
+{% endblock %}

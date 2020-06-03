@@ -1,15 +1,12 @@
-from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView, FormView)
+from django.views.generic import FormView
 
-from ..decorators import employee_required
-from ..forms import EmployeeSignUpForm, ClientSignUpForm, ProductForm, OrderResponseForm, ReturnResponseForm
+from ..forms import EmployeeSignUpForm, ProductForm, OrderResponseForm, ReturnResponseForm
 from ..models import Product, User, Order, AdditionProduct, HistoryOrders
 
 
@@ -81,6 +78,13 @@ def edit_product(request, pk):
                   {
                       'form': form
                   })
+
+
+@login_required
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    product.delete()
+    return render(request, 'employee/delete_success.html')
 
 
 @login_required

@@ -27,7 +27,7 @@ class User(AbstractUser):
 
     signer = TimestampSigner()
 
-    type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.DO_NOTHING, null=True)
+    type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.CASCADE, null=True)
     is_client = models.BooleanField(default=False)
     is_employee = models.BooleanField(default=False)
 
@@ -97,7 +97,7 @@ class Product(models.Model):
     brend = models.CharField(max_length=50)
     product = models.CharField(max_length=100)
     count = models.PositiveIntegerField(default=0)
-    type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.DO_NOTHING)
+    type_of_goods = models.ForeignKey(TypeOfGoods, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="images")
 
     def __str__(self):
@@ -114,8 +114,8 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
     date = models.DateField()
     comment = models.TextField()
@@ -126,8 +126,8 @@ class Order(models.Model):
 
 
 class AdditionProduct(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
     date = models.DateField()
     comment = models.TextField()
@@ -145,9 +145,9 @@ class OrderResponse(models.Model):
 
 
 class HistoryOrders(models.Model):
-    addition = models.ForeignKey(AdditionProduct, blank=True, null=True, on_delete=models.DO_NOTHING)
-    order = models.ForeignKey(Order, blank=True, null=True, on_delete=models.DO_NOTHING)
-    response = models.ForeignKey(OrderResponse, on_delete=models.DO_NOTHING)
+    addition = models.ForeignKey(AdditionProduct, blank=True, null=True, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, blank=True, null=True, on_delete=models.CASCADE)
+    response = models.ForeignKey(OrderResponse, on_delete=models.CASCADE)
     comment = models.TextField()
 
     def __str__(self):

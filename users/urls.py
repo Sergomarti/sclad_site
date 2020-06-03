@@ -1,8 +1,6 @@
-from django.urls import path, include
+from django.urls import path
 
-from . import views
 from .views import main, client, employee
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', main.home, name='home'),
@@ -20,6 +18,7 @@ urlpatterns = [
     path('home_employee/', employee.product_list_employee, name='home_employee'),
     path('add_product/', employee.add_product, name='add_product'),
     path('product/<int:pk>/edit_product/', employee.edit_product, name='edit_product'),
+    path('product/<int:pk>/delete_product/', employee.delete_product, name='delete_product'),
     path('account/<int:pk>/edit_account_employee/', employee.edit_account_employee, name='edit_account_employee'),
 
     path('order/', employee.order_list_employee, name='order'),
